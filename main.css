@@ -7,12 +7,13 @@
     --cell-font-size: 12px;
     --food-font-size: 26px;
     --snake-font-size: 30px;
-    --line-height:24px;
+    --line-height:30px;
 }
 
 *{
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 body {
@@ -25,7 +26,6 @@ body {
     align-items: center;
     justify-content: center;
     height: 100vh;
-
     font-size: var(--cell-font-size);
     line-height: var(--line-height);
 }
@@ -50,38 +50,29 @@ body {
     justify-content: center;
 }
 
-.cell {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 
 #food, #snake {
     display: flex;
     align-items: center;
     justify-content: center;
     position: absolute;
-    background: var(--bg-color);
-    top: 0;
-    left: 0;
     font-weight: bolder;
-    color: var(--food-color);
 }
 
 #food p {
     font-size: var(--food-font-size);
+    line-height: var(--line-height);
 }
 #snake p {
     font-size: var(--snake-font-size);
+    line-height: var(--line-height);
 }
 
 #snake {
     color: var(--snake-color);
     z-index: 10;
-    background: var(--cell-color);
 }
 
 #snake div {
     position: absolute;
-    background: var(--bg-color);
 }

@@ -1,5 +1,5 @@
-const rowNumber: number = 8;
-const colNumber: number = 8;
+const rowNumber: number = 10;
+const colNumber: number = 10;
 
 const cellWidth: number = 30;
 const cellHeight: number = 30;
@@ -107,7 +107,7 @@ function moveSnake() {
     snakePositions = [{top: snakeTopPosition, left: snakeLeftPosition}, ...snakePositions];
     snakePositions.pop();
 
-    addSnake();
+   // addSnake();
 }
 
 // add EventListener of type keyEvent to the document to check if arrow keys are pressed
