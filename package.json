@@ -1,0 +1,23 @@
+{
+  "name": "snake",
+  "version": "1.0.0",
+  "description": "a snake game written in Typescript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint . --ext .ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AndreaChiabotto/snake.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AndreaChiabotto/snake/issues"
+  },
+  "homepage": "https://github.com/AndreaChiabotto/snake#readme",
+  "dependencies": {
+    "rxjs": "^7.5.5"
+  }
+}

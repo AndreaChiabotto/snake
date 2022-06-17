@@ -1,18 +1,23 @@
 "use strict";
-const rowNumber = 20;
-const colNumber = 30;
-const cellWidth = 24;
-const cellHeight = 24;
+const rowNumber = 8;
+const colNumber = 8;
+const cellWidth = 30;
+const cellHeight = 30;
 const cellText = '+';
 const foodText = ['🦋', '🐛', '🐝', '🐞', '🐜', '🕷', '🦂', '🦗', '🦟'];
 const snakeText = '🐍';
 let direction = 'right';
 const container = document.getElementById('container');
+// FOOD
 const food = document.createElement('div');
 food.id = 'food';
+// SNAKE
 let snake = document.createElement('div');
-snake.className = 'snake';
-const snakePositions = [{ top: 10, left: 15 }];
+let snakeLeftPosition = colNumber / 2;
+let snakeTopPosition = rowNumber / 2;
+let snakePositions = [{ top: snakeTopPosition, left: snakeLeftPosition }];
+snake.id = 'snake';
+container.appendChild(snake);
 for (let r = 0; r < rowNumber; r++) {
     const row = document.createElement('div');
     row.classList.add('row');
@@ -44,18 +49,51 @@ function moveFood() {
 addSnake();
 // this function add a div with class 'snake' to the container
 function addSnake() {
-    snake = document.createElement('div');
-    snake.className = 'snake';
-    snake.style.width = cellWidth.toString() + 'px';
-    snake.style.height = cellHeight.toString() + 'px';
-    snake.innerHTML = `<p>${snakeText}</p>`;
-    container.appendChild(snake);
+    snake.innerHTML = '';
+    // generate a snake part looping trough the snakePositions array
+    for (let i = 0; i < snakePositions.length; i++) {
+        const snakePart = document.createElement('div');
+        snakePart.className = 'snake' + i;
+        snakePart.style.top = snakePositions[i].top * cellHeight + 'px';
+        snakePart.style.left = snakePositions[i].left * cellWidth + 'px';
+        snakePart.innerHTML = `<p>${snakeText}</p>`;
+        snake.appendChild(snakePart);
+    }
 }
 moveSnake();
 // this function move the snake to a random position
 function moveSnake() {
-    snake.style.top = (snakePositions[0].top * cellHeight).toString() + 'px';
-    snake.style.left = (snakePositions[0].left * cellWidth).toString() + 'px';
+    // moving snake following the direction
+    switch (direction) {
+        case 'right':
+            snakeLeftPosition++;
+            if (snakeLeftPosition >= colNumber) {
+                snakeLeftPosition = 0;
+            }
+            break;
+        case 'left':
+            snakeLeftPosition--;
+            if (snakeLeftPosition < 0) {
+                snakeLeftPosition = colNumber - 1;
+            }
+            break;
+        case 'up':
+            snakeTopPosition--;
+            if (snakeTopPosition < 0) {
+                snakeTopPosition = rowNumber - 1;
+            }
+            break;
+        case 'down':
+            snakeTopPosition++;
+            if (snakeTopPosition >= rowNumber) {
+                snakeTopPosition = 0;
+            }
+            break;
+        default: // do nothing
+    }
+    snakePositions = [{ top: snakeTopPosition, left: snakeLeftPosition }, ...snakePositions];
+    snakePositions.pop();
+    addSnake();
 }
 // add EventListener of type keyEvent to the document to check if arrow keys are pressed
 document.addEventListener('keydown', (e) => {
@@ -75,6 +113,5 @@ document.addEventListener('keydown', (e) => {
 });
 // every 200ms the snake will move to the next position
 setInterval(() => {
-    const snakeHead = { top: snakePositions[0].top, left: snakePositions[0].left };
-    let newHead;
-}, 200);
+    moveSnake();
+}, 500);

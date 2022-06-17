@@ -1,22 +1,26 @@
-const rowNumber: number = 20;
-const colNumber: number = 30;
+const rowNumber: number = 8;
+const colNumber: number = 8;
 
-const cellWidth: number = 24;
-const cellHeight: number = 24;
+const cellWidth: number = 30;
+const cellHeight: number = 30;
 
 const cellText: string = '+';
-const foodText: Array<string> = ['🦋','🐛','🐝' ,'🐞','🐜','🕷','🦂','🦗','🦟'];
+const foodText: Array<string> = ['🦋', '🐛', '🐝', '🐞', '🐜', '🕷', '🦂', '🦗', '🦟'];
 const snakeText: string = '🐍';
 
 let direction: Directions = 'right';
 
 const container = document.getElementById('container');
+// FOOD
 const food: HTMLElement = document.createElement('div');
 food.id = 'food';
-
+// SNAKE
 let snake: HTMLElement = document.createElement('div');
-snake.className = 'snake';
-const snakePositions: { top: number, left: number }[] = [{ top: 10, left: 15 }];
+let snakeLeftPosition: number = colNumber / 2;
+let snakeTopPosition: number = rowNumber / 2;
+let snakePositions: Array<Position> = [{top: snakeTopPosition, left: snakeLeftPosition}];
+snake.id = 'snake';
+container!.appendChild(snake);
 
 for (let r = 0; r < rowNumber; r++) {
     const row: HTMLElement = document.createElement('div');
@@ -29,7 +33,7 @@ for (let r = 0; r < rowNumber; r++) {
         cell.style.width = cellWidth.toString() + 'px';
         cell.style.height = cellHeight.toString() + 'px';
         cell.innerHTML = `<p>${cellText}</p>`;
-        currentRow[r].appendChild(cell);
+        currentRow[r]!.appendChild(cell);
     }
 }
 
@@ -54,20 +58,56 @@ addSnake();
 
 // this function add a div with class 'snake' to the container
 function addSnake() {
-    snake = document.createElement('div');
-    snake.className = 'snake';
-    snake.style.width = cellWidth.toString() + 'px';
-    snake.style.height = cellHeight.toString() + 'px';
-    snake.innerHTML = `<p>${snakeText}</p>`;
-    container!.appendChild(snake);
+    snake.innerHTML = '';
+
+    // generate a snake part looping trough the snakePositions array
+    for (let i = 0; i < snakePositions.length; i++) {
+        const snakePart: HTMLElement = document.createElement('div');
+        snakePart.className = 'snake' + i;
+        snakePart.style.top = snakePositions[i]!.top * cellHeight + 'px';
+        snakePart.style.left = snakePositions[i]!.left * cellWidth + 'px';
+        snakePart.innerHTML = `<p>${snakeText}</p>`;
+        snake.appendChild(snakePart);
+    }
 }
 
 moveSnake();
 
 // this function move the snake to a random position
 function moveSnake() {
-    snake.style.top = (snakePositions[0].top * cellHeight).toString() + 'px';
-    snake.style.left = (snakePositions[0].left * cellWidth).toString() + 'px';
+    // moving snake following the direction
+    switch (direction) {
+        case 'right':
+            snakeLeftPosition++;
+            if ( snakeLeftPosition >= colNumber ) {
+                snakeLeftPosition = 0;
+            }
+            break;
+        case 'left':
+            snakeLeftPosition--;
+            if ( snakeLeftPosition < 0 ) {
+                snakeLeftPosition = colNumber - 1;
+            }
+            break;
+        case 'up':
+            snakeTopPosition--;
+            if( snakeTopPosition < 0 ) {
+                snakeTopPosition = rowNumber - 1;
+            }
+            break;
+        case 'down':
+            snakeTopPosition++;
+            if( snakeTopPosition >= rowNumber ) {
+                snakeTopPosition = 0;
+            }
+            break;
+        default:   // do nothing
+    }
+
+    snakePositions = [{top: snakeTopPosition, left: snakeLeftPosition}, ...snakePositions];
+    snakePositions.pop();
+
+    addSnake();
 }
 
 // add EventListener of type keyEvent to the document to check if arrow keys are pressed
@@ -87,11 +127,14 @@ document.addEventListener('keydown', (e: KeyboardEvent) => {
 
 // every 200ms the snake will move to the next position
 setInterval(() => {
-    const snakeHead = { top: snakePositions[0].top, left: snakePositions[0].left };
-    let newHead: { top: number, left: number };
-
-}, 200);
+    moveSnake();
+}, 500);
 
 
+// NEW TYPE / INTERFACES
 type Directions = 'right' | 'left' | 'up' | 'down';
 
+interface Position {
+    top: number;
+    left: number;
+}
