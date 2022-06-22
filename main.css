@@ -1,11 +1,11 @@
 :root {
     --bg-color: #fff;
     --cell-color: #E0E0E0;
-    --food-color: tomato;
-    --snake-color: green;
+    --score-color: rgb(45, 45, 178);
 
     --cell-font-size: 12px;
-    --food-font-size: 26px;
+    --food-font-size: 18px;
+    --score-font-size: 24px;
     --snake-font-size: 30px;
     --line-height:30px;
 }
@@ -71,8 +71,18 @@ body {
 #snake {
     color: var(--snake-color);
     z-index: 10;
+  top: 0;
+  left: 0;
+
 }
 
 #snake div {
     position: absolute;
+    background-color: var(--bg-color);
+}
+
+#score {
+    color: var(--score-color);
+    font-size: var(--score-font-size);
+    line-height: var(--line-height);
 }
